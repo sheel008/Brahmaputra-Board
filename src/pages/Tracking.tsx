@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { FileText, Plus, Target, Download, Calculator, Star } from 'lucide-react';
+import { FileText, Plus, Target, Download, Calculator, Star, Users, BarChart3 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState } from 'react';
 import KPICalculator from '@/components/KPICalculator';
@@ -17,7 +17,7 @@ import { KPICard } from '@/components/KPICard';
 import { HQ_STAFF_KPIS, FIELD_UNIT_KPIS, DIVISION_HEAD_KPIS, KPI_CORE_CONCEPTS } from '@/types/kpi';
 import { expandedTimelineData, expandedDistributionData, expandedCategoryBreakdown, expandedStatistics, barChartExpandedData } from '@/data/expandedKPIData';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Info, TrendingUp, BarChart3 } from 'lucide-react';
+import { Info, TrendingUp } from 'lucide-react';
 
 interface TrackingProps {
   currentUser: User;
@@ -30,6 +30,7 @@ export default function Tracking({ currentUser }: TrackingProps) {
   const [kpiNotes, setKpiNotes] = useState('');
   const [selectedKpi, setSelectedKpi] = useState('');
   const [selectedRole, setSelectedRole] = useState<'hq_staff' | 'field_unit' | 'division_head'>('hq_staff');
+  const [teamSurveysOpen, setTeamSurveysOpen] = useState(false);
   
   const isDivisionHead = currentUser.role === 'division_head';
   const isAdmin = currentUser.role === 'administrator';
@@ -96,13 +97,49 @@ export default function Tracking({ currentUser }: TrackingProps) {
       </div>
 
       <Tabs defaultValue="scoring" className="space-y-6">
-        <TabsList className="grid grid-cols-2 lg:grid-cols-4 w-full">
-          <TabsTrigger value="scoring">KPI Scoring</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics & Trends</TabsTrigger>
-          <TabsTrigger value="data-entry">Data Entry</TabsTrigger>
-          <TabsTrigger value="surveys">{isDivisionHead ? 'My Surveys' : isAdmin ? 'Organization Surveys' : 'Surveys'}</TabsTrigger>
-          {isDivisionHead && <TabsTrigger value="team-surveys">Team Surveys</TabsTrigger>}
-        </TabsList>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-2">
+          <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full sm:w-auto gap-1">
+            <TabsTrigger 
+              value="scoring" 
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-semibold px-4 py-3"
+            >
+              <Calculator className="h-4 w-4 mr-2" />
+              KPI Scoring
+            </TabsTrigger>
+            <TabsTrigger 
+              value="analytics" 
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-semibold px-4 py-3"
+            >
+              <BarChart3 className="h-4 w-4 mr-2" />
+              Analytics & Trends
+            </TabsTrigger>
+            <TabsTrigger 
+              value="data-entry" 
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-semibold px-4 py-3"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Data Entry
+            </TabsTrigger>
+            <TabsTrigger 
+              value="surveys" 
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-semibold px-4 py-3"
+            >
+              <FileText className="h-4 w-4 mr-2" />
+              Surveys
+            </TabsTrigger>
+          </TabsList>
+          
+          {isDivisionHead && (
+            <Button 
+              variant="outline" 
+              onClick={() => setTeamSurveysOpen(true)}
+              className="gap-2 border-2 hover:border-primary"
+            >
+              <Users className="h-4 w-4" />
+              View Team Surveys ({teamSurveys.length})
+            </Button>
+          )}
+        </div>
 
         <TabsContent value="scoring" className="space-y-6">
           {/* Overview Card */}
@@ -453,113 +490,121 @@ export default function Tracking({ currentUser }: TrackingProps) {
             </Card>
           ))}
         </TabsContent>
-
-        {isDivisionHead && (
-          <TabsContent value="team-surveys" className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold">Team Survey Evaluations</h2>
-              <Badge variant="secondary">{teamSurveys.length} Surveys</Badge>
-            </div>
-
-            {teamSurveys.map(survey => {
-              const submitter = mockUsers.find(u => u.id === survey.submittedBy);
-              
-              return (
-                <Card key={survey.id} className="p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h3 className="text-lg font-semibold mb-1">{survey.title}</h3>
-                      <p className="text-sm text-muted-foreground">
-                        Submitted by: {submitter?.name} • {new Date(survey.submittedAt).toLocaleDateString()}
-                      </p>
-                    </div>
-                    {survey.evaluation ? (
-                      <Badge variant="default" className="text-lg bg-success">
-                        Evaluated: {survey.evaluation.rating}/100
-                      </Badge>
-                    ) : (
-                      <Badge variant="outline" className="text-coral">
-                        Pending Evaluation
-                      </Badge>
-                    )}
-                  </div>
-
-                  <div className="space-y-3 mb-4">
-                    {survey.questions.map(q => (
-                      <div key={q.id} className="p-3 bg-muted/50 rounded-lg">
-                        <p className="font-medium text-sm mb-1">{q.question}</p>
-                        <p className="text-sm text-muted-foreground">{q.answer}</p>
-                      </div>
-                    ))}
-                  </div>
-
-                  {survey.evaluation ? (
-                    <div className="p-4 bg-success/10 rounded-lg border border-success/20">
-                      <div className="flex items-start gap-3">
-                        <FileText className="h-5 w-5 text-success mt-0.5" />
-                        <div className="flex-1">
-                          <p className="font-medium text-sm mb-1">Your Evaluation</p>
-                          <p className="text-sm text-muted-foreground">{survey.evaluation.comments}</p>
-                          <p className="text-xs text-muted-foreground mt-2">
-                            Evaluated: {new Date(survey.evaluation.evaluatedAt).toLocaleDateString()}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button className="w-full">
-                          <Star className="mr-2 h-4 w-4" />
-                          Evaluate Survey
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Evaluate {submitter?.name}'s Survey</DialogTitle>
-                        </DialogHeader>
-                        <div className="space-y-4">
-                          <div>
-                            <Label>Rating (out of 100)</Label>
-                            <Input 
-                              type="number" 
-                              min="0" 
-                              max="100"
-                              value={rating}
-                              onChange={(e) => setRating(parseInt(e.target.value) || 0)}
-                              placeholder="Enter rating"
-                            />
-                          </div>
-                          <div>
-                            <Label>Comments</Label>
-                            <Textarea 
-                              value={comments}
-                              onChange={(e) => setComments(e.target.value)}
-                              placeholder="Provide feedback and comments"
-                              rows={4}
-                            />
-                          </div>
-                          <div className="flex gap-2">
-                            <Button className="flex-1" variant="outline">Cancel</Button>
-                            <Button className="flex-1">Submit Evaluation</Button>
-                          </div>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
-                  )}
-                </Card>
-              );
-            })}
-
-            {teamSurveys.length === 0 && (
-              <Card className="p-12 text-center">
-                <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">No team surveys to evaluate</p>
-              </Card>
-            )}
-          </TabsContent>
-        )}
       </Tabs>
+
+      {/* Team Surveys Dialog for Division Heads */}
+      {isDivisionHead && (
+        <Dialog open={teamSurveysOpen} onOpenChange={setTeamSurveysOpen}>
+          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="text-2xl flex items-center gap-3">
+                <Users className="h-6 w-6 text-primary" />
+                Team Survey Evaluations
+                <Badge variant="secondary" className="ml-2">{teamSurveys.length} Surveys</Badge>
+              </DialogTitle>
+            </DialogHeader>
+            
+            <div className="space-y-4 mt-4">
+              {teamSurveys.map(survey => {
+                const submitter = mockUsers.find(u => u.id === survey.submittedBy);
+                
+                return (
+                  <Card key={survey.id} className="p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="text-lg font-semibold mb-1">{survey.title}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          Submitted by: {submitter?.name} • {new Date(survey.submittedAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                      {survey.evaluation ? (
+                        <Badge variant="default" className="bg-success">
+                          Evaluated: {survey.evaluation.rating}/100
+                        </Badge>
+                      ) : (
+                        <Badge variant="outline" className="border-coral text-coral">
+                          Pending Evaluation
+                        </Badge>
+                      )}
+                    </div>
+
+                    <div className="space-y-3 mb-4">
+                      {survey.questions.map(q => (
+                        <div key={q.id} className="p-3 bg-muted/50 rounded-lg">
+                          <p className="font-medium text-sm mb-1">{q.question}</p>
+                          <p className="text-sm text-muted-foreground">{q.answer}</p>
+                        </div>
+                      ))}
+                    </div>
+
+                    {survey.evaluation ? (
+                      <div className="p-4 bg-success/10 rounded-lg border border-success/20">
+                        <div className="flex items-start gap-3">
+                          <FileText className="h-5 w-5 text-success mt-0.5" />
+                          <div className="flex-1">
+                            <p className="font-medium text-sm mb-1">Your Evaluation</p>
+                            <p className="text-sm text-muted-foreground">{survey.evaluation.comments}</p>
+                            <p className="text-xs text-muted-foreground mt-2">
+                              Evaluated: {new Date(survey.evaluation.evaluatedAt).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button className="w-full">
+                            <Star className="mr-2 h-4 w-4" />
+                            Evaluate Survey
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Evaluate {submitter?.name}'s Survey</DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-4">
+                            <div>
+                              <Label>Rating (out of 100)</Label>
+                              <Input 
+                                type="number" 
+                                min="0" 
+                                max="100"
+                                value={rating}
+                                onChange={(e) => setRating(parseInt(e.target.value) || 0)}
+                                placeholder="Enter rating"
+                              />
+                            </div>
+                            <div>
+                              <Label>Comments</Label>
+                              <Textarea 
+                                value={comments}
+                                onChange={(e) => setComments(e.target.value)}
+                                placeholder="Provide feedback and comments"
+                                rows={4}
+                              />
+                            </div>
+                            <div className="flex gap-2">
+                              <Button className="flex-1" variant="outline">Cancel</Button>
+                              <Button className="flex-1">Submit Evaluation</Button>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    )}
+                  </Card>
+                );
+              })}
+
+              {teamSurveys.length === 0 && (
+                <Card className="p-12 text-center">
+                  <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground">No team surveys to evaluate</p>
+                </Card>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }

@@ -8,7 +8,7 @@ import { mockNotifications, mockAchievements } from '@/data/mockData';
 import { 
   LayoutDashboard, Target, Activity, 
   TrendingUp, IndianRupee, Users, Trophy, LogOut,
-  Menu, X, UserCircle2, User as UserIcon
+  Menu, X, UserCircle2, User as UserIcon, Monitor
 } from 'lucide-react';
 import DashboardHome from '@/pages/DashboardHome';
 import Tracking from '@/pages/Tracking';
@@ -48,7 +48,7 @@ export default function DashboardLayout({ currentUser, onLogout }: DashboardLayo
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, roles: ['employee', 'division_head', 'administrator'] },
     { name: 'KPIs', path: '/kpi', icon: Target, roles: ['employee', 'division_head', 'administrator'] },
     { name: 'Tracking', path: '/tracking', icon: Activity, roles: ['employee', 'division_head', 'administrator'] },
-    { name: 'Monitoring', path: '/monitoring', icon: Activity, roles: ['division_head', 'administrator'] },
+    { name: 'Monitoring', path: '/monitoring', icon: Monitor, roles: ['division_head', 'administrator'] },
     { name: 'Engagement', path: '/engagement', icon: Users, roles: ['employee', 'division_head', 'administrator'] },
     { name: 'Analytics', path: '/analytics', icon: TrendingUp, roles: ['employee', 'division_head', 'administrator'] },
     { name: 'Finance', path: '/finance', icon: IndianRupee, roles: ['division_head', 'administrator'] },
