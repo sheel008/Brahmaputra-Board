@@ -1,0 +1,170 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 220 25% 97%;
+    --foreground: 215 30% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 30% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 30% 20%;
+
+    /* Elegant deep blue primary */
+    --primary: 215 85% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Soft blue-gray secondary */
+    --secondary: 215 25% 88%;
+    --secondary-foreground: 215 30% 20%;
+
+    /* Muted backgrounds */
+    --muted: 215 20% 92%;
+    --muted-foreground: 215 15% 45%;
+
+    /* Sophisticated purple accent */
+    --accent: 260 60% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Alert colors */
+    --destructive: 355 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Professional emerald green for success */
+    --success: 145 60% 45%;
+    --success-foreground: 0 0% 100%;
+
+    /* Warm amber for warnings */
+    --warning: 38 92% 55%;
+    --warning-foreground: 0 0% 100%;
+
+    /* Rich navy for headers */
+    --navy: 220 60% 25%;
+    --navy-foreground: 0 0% 100%;
+
+    /* Vibrant purple for emphasis */
+    --purple: 265 65% 60%;
+    --purple-foreground: 0 0% 100%;
+
+    /* Calming teal */
+    --teal: 180 55% 48%;
+    --teal-foreground: 0 0% 100%;
+
+    /* Bright cyan for info */
+    --info: 195 85% 50%;
+    --info-foreground: 0 0% 100%;
+
+    /* Elegant indigo */
+    --indigo: 240 70% 62%;
+    --indigo-foreground: 0 0% 100%;
+
+    /* Soft coral for alerts */
+    --coral: 15 85% 65%;
+    --coral-foreground: 0 0% 100%;
+
+    /* Chart colors - complementary palette */
+    --chart-1: 215 85% 45%;
+    --chart-2: 180 55% 48%;
+    --chart-3: 260 60% 55%;
+    --chart-4: 145 60% 45%;
+    --chart-5: 38 92% 55%;
+    --chart-6: 240 70% 62%;
+
+    /* Pie Chart colors - High contrast professional palette */
+    --pie-green: 122 39% 49%;      /* Green for positive (#4CAF50) */
+    --pie-blue: 207 90% 54%;       /* Blue for neutral (#2196F3) */
+    --pie-orange: 36 100% 50%;     /* Orange for warnings (#FF9800) */
+    --pie-red: 4 90% 58%;          /* Red for negatives (#F44336) */
+    --pie-teal: 174 62% 47%;       /* Teal for accents */
+    --pie-purple: 262 52% 47%;     /* Purple for diversity */
+
+    /* Formal Government Portal Colors */
+    --slate-dark: 210 25% 30%;
+    --slate-dark-foreground: 0 0% 100%;
+    --beige-accent: 40 35% 68%;
+    --beige-accent-foreground: 215 30% 20%;
+
+    --border: 215 20% 85%;
+    --input: 215 20% 85%;
+    --ring: 215 85% 45%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 220 30% 96%;
+    --sidebar-foreground: 215 30% 20%;
+    --sidebar-primary: 215 85% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 215 25% 90%;
+    --sidebar-accent-foreground: 215 30% 20%;
+    --sidebar-border: 215 20% 88%;
+    --sidebar-ring: 215 85% 45%;
+  }
+
+  .dark {
+    --background: 210 20% 12%;
+    --foreground: 210 20% 95%;
+
+    --card: 210 20% 15%;
+    --card-foreground: 210 20% 95%;
+
+    --popover: 210 20% 15%;
+    --popover-foreground: 210 20% 95%;
+
+    --primary: 210 60% 65%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 15% 25%;
+    --secondary-foreground: 210 20% 95%;
+
+    --muted: 210 15% 20%;
+    --muted-foreground: 210 15% 65%;
+
+    --accent: 210 50% 30%;
+    --accent-foreground: 210 20% 95%;
+
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 120 40% 60%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 45 100% 55%;
+    --warning-foreground: 45 100% 10%;
+
+    --navy: 240 60% 25%;
+    --navy-foreground: 0 0% 100%;
+
+    --purple: 270 60% 55%;
+    --purple-foreground: 0 0% 100%;
+
+    --border: 210 15% 25%;
+    --input: 210 15% 25%;
+    --ring: 210 60% 65%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
