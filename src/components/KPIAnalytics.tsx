@@ -22,7 +22,15 @@ interface KPIAnalyticsProps {
 }
 
 export default function KPIAnalytics({ data, role }: KPIAnalyticsProps) {
-  const COLORS = ['hsl(var(--pie-blue))', 'hsl(var(--pie-green))', 'hsl(var(--pie-yellow))', 'hsl(var(--pie-purple))', 'hsl(var(--pie-coral))'];
+  // High-contrast complementary colors for pie charts
+  const COLORS = [
+    'hsl(207, 90%, 54%)',  // Blue #2196F3
+    'hsl(122, 39%, 49%)',  // Green #4CAF50
+    'hsl(36, 100%, 50%)',  // Orange #FF9800
+    'hsl(262, 52%, 47%)',  // Purple
+    'hsl(174, 62%, 47%)',  // Teal
+    'hsl(4, 90%, 58%)',    // Red
+  ];
 
   return (
     <div className="space-y-6">
@@ -38,33 +46,33 @@ export default function KPIAnalytics({ data, role }: KPIAnalyticsProps) {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <div className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 rounded-lg">
+          <div className="p-4 bg-[hsl(207,90%,54%)]/10 rounded-lg border border-[hsl(207,90%,54%)]/20">
             <p className="text-xs text-muted-foreground mb-1">Mean Score</p>
-            <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+            <p className="text-2xl font-bold" style={{ color: 'hsl(207, 90%, 54%)' }}>
               {data.stats.mean.toFixed(1)}
             </p>
           </div>
-          <div className="p-4 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900 rounded-lg">
+          <div className="p-4 bg-[hsl(122,39%,49%)]/10 rounded-lg border border-[hsl(122,39%,49%)]/20">
             <p className="text-xs text-muted-foreground mb-1">Median</p>
-            <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+            <p className="text-2xl font-bold" style={{ color: 'hsl(122, 39%, 49%)' }}>
               {data.stats.median.toFixed(1)}
             </p>
           </div>
-          <div className="p-4 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950 dark:to-purple-900 rounded-lg">
+          <div className="p-4 bg-purple/10 rounded-lg border border-purple/20">
             <p className="text-xs text-muted-foreground mb-1">Variance</p>
-            <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+            <p className="text-2xl font-bold text-purple">
               {data.stats.variance.toFixed(1)}
             </p>
           </div>
-          <div className="p-4 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950 dark:to-orange-900 rounded-lg">
+          <div className="p-4 bg-[hsl(36,100%,50%)]/10 rounded-lg border border-[hsl(36,100%,50%)]/20">
             <p className="text-xs text-muted-foreground mb-1">Std Dev</p>
-            <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
+            <p className="text-2xl font-bold" style={{ color: 'hsl(36, 100%, 50%)' }}>
               {data.stats.stdDev.toFixed(1)}
             </p>
           </div>
-          <div className="p-4 bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-950 dark:to-pink-900 rounded-lg">
+          <div className="p-4 bg-teal/10 rounded-lg border border-teal/20">
             <p className="text-xs text-muted-foreground mb-1">CV (Variance)</p>
-            <p className="text-2xl font-bold text-pink-600 dark:text-pink-400">
+            <p className="text-2xl font-bold text-teal">
               {data.stats.cv.toFixed(2)}
             </p>
           </div>
@@ -125,15 +133,15 @@ export default function KPIAnalytics({ data, role }: KPIAnalyticsProps) {
                 <Line 
                   type="monotone" 
                   dataKey="score" 
-                  stroke="hsl(var(--pie-blue))" 
+                  stroke="hsl(207, 90%, 54%)" 
                   strokeWidth={3}
                   name="Performance Score"
-                  dot={{ fill: 'hsl(var(--pie-blue))', r: 5 }}
+                  dot={{ fill: 'hsl(207, 90%, 54%)', r: 5 }}
                 />
                 <Line 
                   type="monotone" 
                   dataKey="target" 
-                  stroke="hsl(var(--pie-green))" 
+                  stroke="hsl(122, 39%, 49%)" 
                   strokeDasharray="5 5"
                   strokeWidth={2}
                   name="Target"
@@ -174,7 +182,7 @@ export default function KPIAnalytics({ data, role }: KPIAnalyticsProps) {
                     fontFamily: 'Roboto, sans-serif'
                   }}
                 />
-                <Bar dataKey="count" fill="hsl(var(--pie-purple))" name="Number of Scores" />
+                <Bar dataKey="count" fill="hsl(262, 52%, 47%)" name="Number of Scores" />
               </BarChart>
             </ResponsiveContainer>
           </Card>
@@ -201,7 +209,7 @@ export default function KPIAnalytics({ data, role }: KPIAnalyticsProps) {
                     labelLine={false}
                     label={({ category, percent }: any) => `${category}: ${(percent * 100).toFixed(0)}%`}
                     outerRadius={100}
-                    fill="hsl(var(--pie-blue))"
+                    fill="hsl(207, 90%, 54%)"
                     dataKey="avgScore"
                   >
                     {data.categoryBreakdown.map((entry, index) => (

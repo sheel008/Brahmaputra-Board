@@ -12,6 +12,12 @@ import { FileText, Plus, Target, Download, Calculator, Star } from 'lucide-react
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState } from 'react';
 import KPICalculator from '@/components/KPICalculator';
+import KPIAnalytics from '@/components/KPIAnalytics';
+import { KPICard } from '@/components/KPICard';
+import { HQ_STAFF_KPIS, FIELD_UNIT_KPIS, DIVISION_HEAD_KPIS, KPI_CORE_CONCEPTS } from '@/types/kpi';
+import { expandedTimelineData, expandedDistributionData, expandedCategoryBreakdown, expandedStatistics, barChartExpandedData } from '@/data/expandedKPIData';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Info, TrendingUp, BarChart3 } from 'lucide-react';
 
 interface TrackingProps {
   currentUser: User;
@@ -23,9 +29,25 @@ export default function Tracking({ currentUser }: TrackingProps) {
   const [kpiValue, setKpiValue] = useState('');
   const [kpiNotes, setKpiNotes] = useState('');
   const [selectedKpi, setSelectedKpi] = useState('');
+  const [selectedRole, setSelectedRole] = useState<'hq_staff' | 'field_unit' | 'division_head'>('hq_staff');
   
   const isDivisionHead = currentUser.role === 'division_head';
   const isAdmin = currentUser.role === 'administrator';
+
+  // Get analytics data for selected role
+  const analyticsData = {
+    timeline: expandedTimelineData[selectedRole],
+    distribution: expandedDistributionData[selectedRole],
+    categoryBreakdown: expandedCategoryBreakdown[selectedRole],
+    stats: expandedStatistics[selectedRole]
+  };
+
+  // Get KPI definitions for each role
+  const allRoleKPIs = {
+    hq_staff: HQ_STAFF_KPIS,
+    field_unit: FIELD_UNIT_KPIS,
+    division_head: DIVISION_HEAD_KPIS
+  };
   
   const userKPIs = mockKPIs.filter(k => k.userId === currentUser.id);
   const userSurveys = mockSurveys.filter(s => s.submittedBy === currentUser.id);
@@ -74,8 +96,9 @@ export default function Tracking({ currentUser }: TrackingProps) {
       </div>
 
       <Tabs defaultValue="scoring" className="space-y-6">
-        <TabsList>
+        <TabsList className="grid grid-cols-2 lg:grid-cols-4 w-full">
           <TabsTrigger value="scoring">KPI Scoring</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics & Trends</TabsTrigger>
           <TabsTrigger value="data-entry">Data Entry</TabsTrigger>
           <TabsTrigger value="surveys">{isDivisionHead ? 'My Surveys' : isAdmin ? 'Organization Surveys' : 'Surveys'}</TabsTrigger>
           {isDivisionHead && <TabsTrigger value="team-surveys">Team Surveys</TabsTrigger>}
@@ -85,39 +108,61 @@ export default function Tracking({ currentUser }: TrackingProps) {
           {/* Overview Card */}
           <Card className="p-6 bg-gradient-to-br from-primary/5 to-accent/5 border-2 border-primary/20">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-gradient-to-br from-primary to-accent rounded-xl">
+              <div className="p-3 bg-gradient-to-br from-primary to-accent rounded-xl shadow-lg">
                 <Calculator className="h-7 w-7 text-white" />
               </div>
               <div>
                 <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                   KPI Scoring System
                 </h2>
-                <p className="text-muted-foreground">Interactive scoring with weighted formulas</p>
+                <p className="text-muted-foreground">Comprehensive calculator with weighted formulas & backend integration</p>
               </div>
             </div>
             
-            <div className="p-4 bg-card rounded-lg border border-border">
-              <h3 className="font-semibold mb-2 text-primary">Scoring Formula</h3>
+            <div className="p-4 bg-card rounded-lg border border-border shadow-sm">
+              <h3 className="font-semibold mb-2 text-primary flex items-center gap-2">
+                <Info className="h-4 w-4" />
+                Scoring Formula
+              </h3>
               <p className="text-sm text-muted-foreground mb-2">
-                Final KPI Score = Σ(Individual KPI Score × Weight) for all KPIs
+                Final KPI Score = Σ(Individual KPI Score × Weight) ÷ 100
               </p>
-              <div className="grid grid-cols-2 gap-4 mt-4">
-                <div className="p-3 bg-pie-blue/10 rounded-lg">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div className="p-3 bg-[hsl(210,100%,50%)]/10 rounded-lg border border-[hsl(210,100%,50%)]/20">
                   <p className="text-xs text-muted-foreground">Quantitative KPIs</p>
-                  <p className="text-lg font-bold text-pie-blue">70-80%</p>
+                  <p className="text-lg font-bold" style={{ color: 'hsl(210, 100%, 50%)' }}>70-80%</p>
                   <p className="text-xs text-muted-foreground">Auto-tracked metrics</p>
                 </div>
-                <div className="p-3 bg-pie-green/10 rounded-lg">
+                <div className="p-3 bg-[hsl(122,39%,49%)]/10 rounded-lg border border-[hsl(122,39%,49%)]/20">
                   <p className="text-xs text-muted-foreground">Qualitative KPIs</p>
-                  <p className="text-lg font-bold text-pie-green">20-30%</p>
+                  <p className="text-lg font-bold" style={{ color: 'hsl(122, 39%, 49%)' }}>20-30%</p>
                   <p className="text-xs text-muted-foreground">Manual assessments</p>
                 </div>
               </div>
             </div>
+
+            {/* Core Concepts */}
+            <Accordion type="single" collapsible className="mt-6">
+              <AccordionItem value="concepts">
+                <AccordionTrigger className="text-sm font-semibold">
+                  Understanding KPI Concepts
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                    {Object.entries(KPI_CORE_CONCEPTS).map(([key, concept]) => (
+                      <div key={key} className="p-4 bg-muted/50 rounded-lg border border-border">
+                        <h4 className="font-semibold text-sm mb-1 text-primary">{concept.title}</h4>
+                        <p className="text-xs text-muted-foreground">{concept.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </Card>
 
           {/* Role-based Scoring Tabs */}
-          <Tabs defaultValue="hq_staff" className="space-y-6">
+          <Tabs defaultValue="hq_staff" onValueChange={(v) => setSelectedRole(v as typeof selectedRole)} className="space-y-6">
             <TabsList className="grid grid-cols-3 w-full">
               <TabsTrigger value="hq_staff">HQ Staff</TabsTrigger>
               <TabsTrigger value="field_unit">Field Units</TabsTrigger>
@@ -125,15 +170,99 @@ export default function Tracking({ currentUser }: TrackingProps) {
             </TabsList>
 
             <TabsContent value="hq_staff" className="space-y-6">
+              {/* KPI List */}
+              <Card className="p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <TrendingUp className="h-5 w-5 text-primary" />
+                  <h3 className="text-lg font-semibold">HQ Staff KPI Definitions</h3>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {HQ_STAFF_KPIS.map((kpi, idx) => (
+                    <KPICard 
+                      key={kpi.id} 
+                      kpi={kpi} 
+                      currentValue={barChartExpandedData.hq_staff[idx]?.score || 0}
+                    />
+                  ))}
+                </div>
+              </Card>
               <KPICalculator role="hq_staff" />
             </TabsContent>
 
             <TabsContent value="field_unit" className="space-y-6">
+              {/* KPI List */}
+              <Card className="p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <TrendingUp className="h-5 w-5 text-primary" />
+                  <h3 className="text-lg font-semibold">Field Unit KPI Definitions</h3>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {FIELD_UNIT_KPIS.map((kpi, idx) => (
+                    <KPICard 
+                      key={kpi.id} 
+                      kpi={kpi} 
+                      currentValue={barChartExpandedData.field_unit[idx]?.score || 0}
+                    />
+                  ))}
+                </div>
+              </Card>
               <KPICalculator role="field_unit" />
             </TabsContent>
 
             <TabsContent value="division_head" className="space-y-6">
+              {/* KPI List */}
+              <Card className="p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <TrendingUp className="h-5 w-5 text-primary" />
+                  <h3 className="text-lg font-semibold">Division Head KPI Definitions</h3>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {DIVISION_HEAD_KPIS.map((kpi, idx) => (
+                    <KPICard 
+                      key={kpi.id} 
+                      kpi={kpi} 
+                      currentValue={barChartExpandedData.division_head[idx]?.score || 0}
+                    />
+                  ))}
+                </div>
+              </Card>
               <KPICalculator role="division_head" />
+            </TabsContent>
+          </Tabs>
+        </TabsContent>
+
+        <TabsContent value="analytics" className="space-y-6">
+          <Card className="p-6 bg-gradient-to-br from-primary/5 to-teal/5 border-2 border-primary/20">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-3 bg-gradient-to-br from-primary to-teal rounded-xl shadow-lg">
+                <BarChart3 className="h-7 w-7 text-white" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-teal bg-clip-text text-transparent">
+                  KPI Analytics & Trends
+                </h2>
+                <p className="text-muted-foreground">Comprehensive performance insights across all employee levels</p>
+              </div>
+            </div>
+          </Card>
+
+          <Tabs defaultValue="hq_staff" onValueChange={(v) => setSelectedRole(v as typeof selectedRole)} className="space-y-6">
+            <TabsList className="grid grid-cols-3 w-full">
+              <TabsTrigger value="hq_staff">HQ Staff Analytics</TabsTrigger>
+              <TabsTrigger value="field_unit">Field Units Analytics</TabsTrigger>
+              <TabsTrigger value="division_head">Division Heads Analytics</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="hq_staff">
+              <KPIAnalytics data={analyticsData} role="hq_staff" />
+            </TabsContent>
+
+            <TabsContent value="field_unit">
+              <KPIAnalytics data={analyticsData} role="field_unit" />
+            </TabsContent>
+
+            <TabsContent value="division_head">
+              <KPIAnalytics data={analyticsData} role="division_head" />
             </TabsContent>
           </Tabs>
         </TabsContent>

@@ -17,7 +17,7 @@ import Engagement from '@/pages/Engagement';
 import Analytics from '@/pages/Analytics';
 import Finance from '@/pages/Finance';
 import KPIManagement from '@/pages/KPIManagement';
-import KPIScoring from '@/pages/KPIScoring';
+
 import { cn } from '@/lib/utils';
 import logo from '@/assets/brahmaputra-logo-new.png';
 
@@ -47,7 +47,6 @@ export default function DashboardLayout({ currentUser, onLogout }: DashboardLayo
   const navigation = [
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, roles: ['employee', 'division_head', 'administrator'] },
     { name: 'KPIs', path: '/kpi', icon: Target, roles: ['employee', 'division_head', 'administrator'] },
-    { name: 'KPI Scoring', path: '/kpi-scoring', icon: Target, roles: ['employee', 'division_head', 'administrator'] },
     { name: 'Tracking', path: '/tracking', icon: Activity, roles: ['employee', 'division_head', 'administrator'] },
     { name: 'Monitoring', path: '/monitoring', icon: Activity, roles: ['division_head', 'administrator'] },
     { name: 'Engagement', path: '/engagement', icon: Users, roles: ['employee', 'division_head', 'administrator'] },
@@ -192,7 +191,6 @@ export default function DashboardLayout({ currentUser, onLogout }: DashboardLayo
         <Routes>
           <Route path="/dashboard" element={<DashboardHome currentUser={currentUser} />} />
           <Route path="/kpi" element={<KPIManagement currentUser={currentUser} />} />
-          <Route path="/kpi-scoring" element={<KPIScoring />} />
           <Route path="/tracking" element={<Tracking currentUser={currentUser} />} />
           <Route path="/monitoring" element={<Monitoring currentUser={currentUser} />} />
           <Route path="/engagement" element={<Engagement currentUser={currentUser} />} />
