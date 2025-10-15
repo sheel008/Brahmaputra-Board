@@ -48,6 +48,7 @@ backend/server/env.production
 # Root
 bun.lockb
 package-lock.json
+!frontend/package-lock.json
 
 # Misc
 *.tar
