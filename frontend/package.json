@@ -88,7 +88,7 @@
     "cross-env": "^7.0.3"
   },
   "engines": {
-    "node": "18.x"
+    "node": "22.x"
   },
   "packageManager": "npm@10"
 }
