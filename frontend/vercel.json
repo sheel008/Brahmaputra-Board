@@ -22,8 +22,6 @@
   "env": {
     "VITE_NODE_ENV": "production",
     "ROLLUP_SKIP_NODEJS_NATIVE": "1",
-    "ROLLUP_SKIP_NODEJS": "1",
-    "ROLLUP_BINDINGS": "wasm",
     "NPM_CONFIG_FUND": "false",
     "NPM_CONFIG_AUDIT": "false"
   }
