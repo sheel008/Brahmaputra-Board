@@ -20,6 +20,7 @@
     }
   ],
   "env": {
-    "VITE_NODE_ENV": "production"
+    "VITE_NODE_ENV": "production",
+    "ROLLUP_SKIP_NODEJS_NATIVE": "1"
   }
 }
