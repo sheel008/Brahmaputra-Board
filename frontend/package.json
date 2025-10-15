@@ -84,7 +84,7 @@
     "vite": "^7.1.9"
   },
   "engines": {
-    "node": ">=18 <23"
+    "node": "20.x"
   },
   "packageManager": "npm@10"
 }
