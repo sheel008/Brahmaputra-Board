@@ -19,7 +19,6 @@ import Finance from '@/pages/Finance';
 import KPIManagement from '@/pages/KPIManagement';
 
 import { cn } from '@/lib/utils';
-import logo from '@/assets/brahmaputra-logo-new.png';
 
 interface DashboardLayoutProps {
   currentUser: User;
@@ -80,11 +79,6 @@ export default function DashboardLayout({ currentUser, onLogout }: DashboardLayo
               {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
             <Link to="/dashboard" className="flex items-center gap-3 hover:opacity-90 transition-all duration-200">
-              <img 
-                src={logo} 
-                alt="Brahmaputra Board Logo" 
-                className="w-10 h-10 ring-2 ring-white/20 rounded-lg flex-shrink-0" 
-              />
               <div className="text-white min-w-0">
                 <h1 className="font-bold text-lg leading-tight truncate" style={{ fontFamily: 'Poppins, sans-serif' }}>
                   Brahmaputra Board

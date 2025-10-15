@@ -18,7 +18,8 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: "dist",
     sourcemap: false,
-    minify: "terser",
+    // Use esbuild minifier for compatibility on Vercel default images
+    minify: "esbuild",
     rollupOptions: {
       output: {
         manualChunks: {
