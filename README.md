@@ -1,73 +1,101 @@
-# Welcome to your Lovable project
+# Brahmaputra Board e-Office Productivity Management Module
 
-## Project info
+A comprehensive e-office productivity management system built with React, Node.js, and MongoDB.
 
-**URL**: https://lovable.dev/projects/28105997-e993-4980-a2b4-1bec2ff99a15
+## Project Structure
 
-## How can I edit this code?
+This project is organized into separate frontend and backend folders:
 
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/28105997-e993-4980-a2b4-1bec2ff99a15) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+├── frontend/              # Frontend React application
+│   ├── src/              # React source code
+│   ├── public/           # Static assets
+│   ├── package.json      # Frontend dependencies
+│   └── vite.config.ts    # Vite configuration
+├── backend/              # Backend Node.js application
+│   ├── server/           # Express server code
+│   ├── .env              # Environment variables
+│   └── package.json      # Backend dependencies
+└── package.json          # Root package.json for workspace management
 ```
 
-**Edit a file directly in GitHub**
+## Features
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- **KPI Management**: Track and manage Key Performance Indicators
+- **Task Management**: Organize and track tasks with drag-and-drop functionality
+- **Analytics Dashboard**: Comprehensive analytics and reporting
+- **User Management**: Role-based access control
+- **Real-time Notifications**: Socket.io powered notifications
+- **Financial Tracking**: Budget and expense management
+- **Audit Logging**: Complete audit trail of all activities
 
-**Use GitHub Codespaces**
+## Tech Stack
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Frontend
+- React 18 with TypeScript
+- Vite for build tooling
+- Tailwind CSS for styling
+- Shadcn/ui components
+- React Router for navigation
+- React Query for state management
+- Socket.io client for real-time features
 
-## What technologies are used for this project?
+### Backend
+- Node.js with Express
+- MongoDB with Mongoose
+- JWT authentication
+- Socket.io for real-time communication
+- Winston for logging
+- Joi for validation
 
-This project is built with:
+## Getting Started
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Prerequisites
+- Node.js 20+
+- MongoDB
+- npm or yarn
 
-## How can I deploy this project?
+### Installation
 
-Simply open [Lovable](https://lovable.dev/projects/28105997-e993-4980-a2b4-1bec2ff99a15) and click on Share -> Publish.
+1. Clone the repository
+2. Install all dependencies:
+   ```bash
+   npm run install:all
+   ```
 
-## Can I connect a custom domain to my Lovable project?
+3. Set up environment variables:
+   ```bash
+   cp backend/.env.example backend/.env
+   ```
 
-Yes, you can!
+4. Start both frontend and backend:
+   ```bash
+   npm run dev
+   ```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Individual Commands
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+- **Frontend only**: `npm run dev:frontend`
+- **Backend only**: `npm run dev:backend`
+- **Build frontend**: `npm run build:frontend`
+- **Start backend**: `npm run start:backend`
+
+## API Endpoints
+
+- `GET /api/health` - Health check
+- `POST /api/auth/login` - User login
+- `GET /api/kpis` - Get KPIs
+- `POST /api/kpis` - Create KPI
+- `GET /api/tasks` - Get tasks
+- `POST /api/tasks` - Create task
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+MIT License

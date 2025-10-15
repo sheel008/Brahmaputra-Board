@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Test - Brahmaputra Board</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .credentials {
+            background-color: #e2e3e5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .credentials h3 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Login Test - Brahmaputra Board</h1>
+        
+        <div class="credentials">
+            <h3>Demo Credentials:</h3>
+            <p><strong>Employee:</strong> rajesh.kumar@brahmaputra.gov.in / password123</p>
+            <p><strong>Division Head:</strong> priya.sharma@brahmaputra.gov.in / password123</p>
+            <p><strong>Administrator:</strong> admin@brahmaputra.gov.in / admin123</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <button type="submit" id="loginBtn">Test Login</button>
+        </form>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const result = document.getElementById('result');
+        const loginBtn = document.getElementById('loginBtn');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Testing...';
+            result.innerHTML = '';
+            
+            try {
+                console.log('Testing login with:', { email, password });
+                
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
+                const data = await response.json();
+                console.log('Response data:', data);
+                
+                if (response.ok && data.success) {
+                    result.className = 'result success';
+                    result.innerHTML = `✅ Login Successful!\n\nUser: ${data.data.user.name}\nEmail: ${data.data.user.email}\nRole: ${data.data.user.role}\nDepartment: ${data.data.user.department}\nToken: ${data.data.token}`;
+                } else {
+                    result.className = 'result error';
+                    result.innerHTML = `❌ Login Failed!\n\nError: ${data.message || 'Unknown error'}`;
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                result.className = 'result error';
+                result.innerHTML = `❌ Connection Error!\n\nError: ${error.message}\n\nMake sure the backend server is running on http://localhost:5000`;
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Test Login';
+            }
+        });
+
+        // Test server connection on page load
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/health');
+                const data = await response.json();
+                console.log('Server health check:', data);
+                result.className = 'result success';
+                result.innerHTML = `✅ Backend server is running!\n\nStatus: ${data.status}\nUptime: ${Math.round(data.uptime)}s`;
+            } catch (error) {
+                console.error('Server health check failed:', error);
+                result.className = 'result error';
+                result.innerHTML = `❌ Backend server is not running!\n\nError: ${error.message}\n\nPlease start the backend server first.`;
+            }
+        });
+    </script>
+</body>
+</html>
+
